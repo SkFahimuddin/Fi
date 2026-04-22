@@ -1,24 +1,31 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core/constants/colors.dart';
 import 'firebase_options.dart';
+import 'router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: FiApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class FiApp extends StatelessWidget {
+  const FiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fi',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: backgroundColor,
+        appBarTheme: const AppBarTheme(backgroundColor: appBarColor),
+      ),
+      onGenerateRoute: (settings) => generateRoute(settings),
       home: const Scaffold(
         body: Center(
           child: Text(
