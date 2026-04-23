@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.fi"
+    namespace = "com.FahimMinWorks.fi"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
