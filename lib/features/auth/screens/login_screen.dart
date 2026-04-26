@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/colors.dart';
@@ -15,6 +16,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool isLogin = true;
+  bool isLoading = false;
+  bool obscurePassword = true;
 
   @override
   void dispose() {
@@ -23,11 +26,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  void handleSubmit() {
+  void handleSubmit() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
-    if (email.isEmpty || password.isEmpty) return;
-
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill in all fields')));
+      return;
+    }
+    setState(() => isLoading = true);
     if (isLogin) {
       ref.read(authControllerProvider).signInWithEmail(context, email, password);
     } else {
@@ -38,6 +45,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       );
     }
+    setState(() => isLoading = false);
   }
 
   void handleForgotPassword() {
@@ -53,83 +61,214 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF0A0A0A),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text('Fi 💬',
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: tabColor)),
-              const SizedBox(height: 8),
-              Text(isLogin ? 'Welcome back' : 'Create your account',
-                  style: const TextStyle(fontSize: 16, color: greyColor)),
-              const SizedBox(height: 40),
-              TextField(
+              const SizedBox(height: 60),
+
+              // Logo
+              Container(
+                width: 90,
+                height: 90,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFF00A884).withOpacity(0.15),
+                  border: Border.all(color: const Color(0xFF00A884), width: 2),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Fi',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF00A884),
+                      letterSpacing: 2,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // App name
+              const Text(
+                'Fi',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 4,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                isLogin ? 'Welcome back' : 'Create your account',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withOpacity(0.5),
+                  letterSpacing: 1,
+                ),
+              ),
+
+              const SizedBox(height: 50),
+
+              // Email field
+              _buildTextField(
                 controller: emailController,
+                hint: 'Email address',
+                icon: Icons.email_outlined,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  hintText: 'Email',
-                  prefixIcon: Icon(Icons.email, color: tabColor),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: tabColor)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: tabColor)),
-                ),
               ),
+
               const SizedBox(height: 16),
-              TextField(
+
+              // Password field
+              _buildTextField(
                 controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  hintText: 'Password',
-                  prefixIcon: Icon(Icons.lock, color: tabColor),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: tabColor)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: tabColor)),
+                hint: 'Password',
+                icon: Icons.lock_outline,
+                obscure: obscurePassword,
+                suffix: IconButton(
+                  icon: Icon(
+                    obscurePassword ? Icons.visibility_off : Icons.visibility,
+                    color: Colors.white38,
+                    size: 20,
+                  ),
+                  onPressed: () =>
+                      setState(() => obscurePassword = !obscurePassword),
                 ),
               ),
+
               if (isLogin) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: handleForgotPassword,
-                    child: const Text('Forgot Password?',
-                        style: TextStyle(color: tabColor)),
+                  child: GestureDetector(
+                    onTap: handleForgotPassword,
+                    child: const Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        color: Color(0xFF00A884),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
               ],
-              const SizedBox(height: 24),
+
+              const SizedBox(height: 32),
+
+              // Submit button
               SizedBox(
                 width: double.infinity,
+                height: 54,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: tabColor,
+                    backgroundColor: const Color(0xFF00A884),
                     foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    elevation: 0,
                   ),
-                  onPressed: handleSubmit,
-                  child: Text(
-                    isLogin ? 'LOGIN' : 'NEXT',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                  onPressed: isLoading ? null : handleSubmit,
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(
+                          isLogin ? 'LOGIN' : 'NEXT',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            letterSpacing: 2,
+                          ),
+                        ),
                 ),
               ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () => setState(() => isLogin = !isLogin),
-                child: Text(
-                  isLogin
-                      ? "Don't have an account? Sign Up"
-                      : 'Already have an account? Login',
-                  style: const TextStyle(color: tabColor),
+
+              const SizedBox(height: 24),
+
+              // Toggle login/signup
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    isLogin
+                        ? "Don't have an account? "
+                        : 'Already have an account? ',
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.5), fontSize: 13),
+                  ),
+                  GestureDetector(
+                    onTap: () => setState(() => isLogin = !isLogin),
+                    child: Text(
+                      isLogin ? 'Sign Up' : 'Login',
+                      style: const TextStyle(
+                        color: Color(0xFF00A884),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 40),
+
+              // Bottom tagline
+              Text(
+                'Fast. Simple. Private.',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.2),
+                  fontSize: 12,
+                  letterSpacing: 2,
                 ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+    bool obscure = false,
+    Widget? suffix,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A1A),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withOpacity(0.08)),
+      ),
+      child: TextField(
+        controller: controller,
+        keyboardType: keyboardType,
+        obscureText: obscure,
+        style: const TextStyle(color: Colors.white, fontSize: 15),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: TextStyle(color: Colors.white.withOpacity(0.3), fontSize: 14),
+          prefixIcon: Icon(icon, color: const Color(0xFF00A884), size: 20),
+          suffixIcon: suffix,
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(vertical: 18),
         ),
       ),
     );
