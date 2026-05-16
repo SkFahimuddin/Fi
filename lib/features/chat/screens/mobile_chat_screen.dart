@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
-import '../../../core/constants/colors.dart';
 import '../../../models/message.dart';
 import '../../../core/enums/message_enum.dart';
 
@@ -44,43 +41,6 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
-    }
-  }
-
-  Future<void> _sendNotification(String receiverId, String message) async {
-    try {
-      var receiverDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(receiverId)
-          .get();
-
-      String? onesignalId = receiverDoc.data()?['onesignalId'];
-      if (onesignalId == null) return;
-
-      var senderDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currentUser.uid)
-          .get();
-      String senderName = senderDoc.data()?['name'] ?? 'Fi';
-
-      await http.post(
-        Uri.parse('https://onesignal.com/api/v1/notifications'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'os_v2_app_habsmusibbaobo6ktrqp7f5f44tm5dkkkm5e7mupod37cnlconpbsnfoq4tzahowsbsvaqroq47hkjhir5zvwzbn3vmm2o6vqqz7kbq',
-        },
-        body: jsonEncode({
-          'app_id': '38032652-4808-40e0-bbca-9c60ff97a5e7',
-          'include_aliases': {
-            'onesignal_id': [onesignalId]
-          },
-          'target_channel': 'push',
-          'headings': {'en': senderName},
-          'contents': {'en': message},
-        }),
-      );
-    } catch (e) {
-      // silently fail
     }
   }
 
@@ -125,7 +85,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
         .doc(messageId)
         .set(message.toMap());
 
-    // Save to receiver's chat
+    // Save to receiver's chat (this triggers Cloud Function automatically)
     await FirebaseFirestore.instance
         .collection('users')
         .doc(widget.uid)
@@ -163,7 +123,6 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
       'profilePic': senderPic,
     });
 
-    await _sendNotification(widget.uid, text);
     scrollToBottom();
   }
 
@@ -313,8 +272,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
           left: isMe ? 60 : 0,
           right: isMe ? 0 : 60,
         ),
-        padding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isMe
               ? const Color(0xFF005C4B)
@@ -331,8 +289,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
           children: [
             Text(
               msg.text,
-              style:
-                  const TextStyle(color: Colors.white, fontSize: 15),
+              style: const TextStyle(color: Colors.white, fontSize: 15),
             ),
             const SizedBox(height: 4),
             Row(
