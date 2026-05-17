@@ -12,14 +12,14 @@ class ChatListScreen extends StatelessWidget {
     final currentUser = FirebaseAuth.instance.currentUser!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
+      backgroundColor: const Color(0xFF0A0A0F),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
+        backgroundColor: const Color(0xFF0A0A0F),
         elevation: 0,
         title: const Text(
           'Fi',
           style: TextStyle(
-            color: Color(0xFF00A884),
+            color: Color(0xFF2D7DD2),
             fontWeight: FontWeight.bold,
             fontSize: 28,
             letterSpacing: 4,
@@ -42,7 +42,7 @@ class ChatListScreen extends StatelessWidget {
               showMenu(
                 context: context,
                 position: const RelativeRect.fromLTRB(100, 80, 0, 0),
-                color: const Color(0xFF1A1A1A),
+                color: const Color(0xFF0D1117),
                 items: [
                   PopupMenuItem(
                     child: const Text('Logout',
@@ -83,7 +83,7 @@ class ChatListScreen extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                       child: CircularProgressIndicator(
-                          color: Color(0xFF00A884)));
+                          color: Color(0xFF2D7DD2)));
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return Center(
@@ -95,10 +95,10 @@ class ChatListScreen extends StatelessWidget {
                           height: 80,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color(0xFF00A884).withOpacity(0.1),
+                            color: const Color(0xFF2D7DD2).withOpacity(0.1),
                           ),
                           child: const Icon(Icons.chat_bubble_outline,
-                              color: Color(0xFF00A884), size: 36),
+                              color: Color(0xFF2D7DD2), size: 36),
                         ),
                         const SizedBox(height: 16),
                         const Text(
@@ -131,10 +131,26 @@ class ChatListScreen extends StatelessWidget {
               },
             ),
           ),
+
+          // Footer
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12, top: 6),
+            child: Center(
+              child: Text(
+                'Fahim MindWorks',
+                style: TextStyle(
+                  color: const Color(0xFF2D7DD2).withOpacity(0.3),
+                  fontSize: 10,
+                  letterSpacing: 1.5,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF00A884),
+        backgroundColor: const Color(0xFF2D7DD2),
         onPressed: () {
           Navigator.push(
             context,
@@ -142,7 +158,7 @@ class ChatListScreen extends StatelessWidget {
                 builder: (_) => const SelectContactsScreen()),
           );
         },
-        child: const Icon(Icons.edit, color: Colors.black),
+        child: const Icon(Icons.edit, color: Colors.white),
       ),
     );
   }
@@ -172,24 +188,20 @@ class ChatListScreen extends StatelessWidget {
         child: Row(
           children: [
             // Avatar
-            Stack(
-              children: [
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: const Color(0xFF1A1A1A),
-                  backgroundImage:
-                      profilePic.isNotEmpty ? NetworkImage(profilePic) : null,
-                  child: profilePic.isEmpty
-                      ? Text(
-                          name.isNotEmpty ? name[0].toUpperCase() : '?',
-                          style: const TextStyle(
-                              color: Color(0xFF00A884),
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        )
-                      : null,
-                ),
-              ],
+            CircleAvatar(
+              radius: 28,
+              backgroundColor: const Color(0xFF0D1117),
+              backgroundImage:
+                  profilePic.isNotEmpty ? NetworkImage(profilePic) : null,
+              child: profilePic.isEmpty
+                  ? Text(
+                      name.isNotEmpty ? name[0].toUpperCase() : '?',
+                      style: const TextStyle(
+                          color: Color(0xFF2D7DD2),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    )
+                  : null,
             ),
             const SizedBox(width: 14),
             // Name and message

@@ -61,7 +61,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
+      backgroundColor: const Color(0xFF0A0A0F),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -76,8 +76,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 height: 90,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF00A884).withOpacity(0.15),
-                  border: Border.all(color: const Color(0xFF00A884), width: 2),
+                  color: const Color(0xFF2D7DD2).withOpacity(0.15),
+                  border: Border.all(color: const Color(0xFF2D7DD2), width: 2),
                 ),
                 child: const Center(
                   child: Text(
@@ -85,7 +85,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF00A884),
+                      color: Color(0xFF2D7DD2),
                       letterSpacing: 2,
                     ),
                   ),
@@ -152,7 +152,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: const Text(
                       'Forgot Password?',
                       style: TextStyle(
-                        color: Color(0xFF00A884),
+                        color: Color(0xFF2D7DD2),
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
                       ),
@@ -169,8 +169,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 height: 54,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00A884),
-                    foregroundColor: Colors.black,
+                    backgroundColor: const Color(0xFF2D7DD2),
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
@@ -182,7 +182,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(
-                            color: Colors.black,
+                            color: Colors.white,
                             strokeWidth: 2,
                           ),
                         )
@@ -212,10 +212,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () => setState(() => isLogin = !isLogin),
-                    child: Text(
-                      isLogin ? 'Sign Up' : 'Login',
-                      style: const TextStyle(
-                        color: Color(0xFF00A884),
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        color: Color(0xFF2D7DD2),
                         fontWeight: FontWeight.bold,
                         fontSize: 13,
                       ),
@@ -235,6 +235,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   letterSpacing: 2,
                 ),
               ),
+
+              const SizedBox(height: 12),
+
+              // Footer
+              Text(
+                'Fahim MindWorks',
+                style: TextStyle(
+                  color: const Color(0xFF2D7DD2).withOpacity(0.45),
+                  fontSize: 11,
+                  letterSpacing: 1.5,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
               const SizedBox(height: 20),
             ],
           ),
@@ -253,7 +267,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
+        color: const Color(0xFF0D1117),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: Colors.white.withOpacity(0.08)),
       ),
@@ -265,7 +279,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(color: Colors.white.withOpacity(0.3), fontSize: 14),
-          prefixIcon: Icon(icon, color: const Color(0xFF00A884), size: 20),
+          prefixIcon: Icon(icon, color: const Color(0xFF2D7DD2), size: 20),
           suffixIcon: suffix,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(vertical: 18),

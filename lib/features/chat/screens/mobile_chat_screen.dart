@@ -67,7 +67,6 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
     messageController.clear();
     setState(() => isTyping = false);
 
-    // Get sender info from Firestore
     var myDoc = await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUser.uid)
@@ -75,7 +74,6 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
     String senderName = myDoc.data()?['name'] ?? 'User';
     String senderPic = myDoc.data()?['profilePic'] ?? '';
 
-    // Save to my chat
     await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUser.uid)
@@ -85,7 +83,6 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
         .doc(messageId)
         .set(message.toMap());
 
-    // Save to receiver's chat (this triggers Cloud Function automatically)
     await FirebaseFirestore.instance
         .collection('users')
         .doc(widget.uid)
@@ -95,7 +92,6 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
         .doc(messageId)
         .set(message.toMap());
 
-    // Update last message for me
     await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUser.uid)
@@ -109,7 +105,6 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
       'profilePic': widget.profilePic,
     });
 
-    // Update last message for receiver
     await FirebaseFirestore.instance
         .collection('users')
         .doc(widget.uid)
@@ -130,9 +125,9 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: const Color(0xFF0B141A),
+      backgroundColor: const Color(0xFF060A0F),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1F2C34),
+        backgroundColor: const Color(0xFF0D1117),
         elevation: 0,
         leadingWidth: 30,
         leading: IconButton(
@@ -143,7 +138,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundColor: const Color(0xFF2A3942),
+              backgroundColor: const Color(0xFF161B22),
               backgroundImage: widget.profilePic.isNotEmpty
                   ? NetworkImage(widget.profilePic)
                   : null,
@@ -153,7 +148,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
                           ? widget.name[0].toUpperCase()
                           : '?',
                       style: const TextStyle(
-                          color: Color(0xFF00A884),
+                          color: Color(0xFF2D7DD2),
                           fontWeight: FontWeight.bold),
                     )
                   : null,
@@ -208,7 +203,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
                 if (!snapshot.hasData) {
                   return const Center(
                       child: CircularProgressIndicator(
-                          color: Color(0xFF00A884)));
+                          color: Color(0xFF2D7DD2)));
                 }
                 if (snapshot.data!.docs.isEmpty) {
                   return Center(
@@ -275,8 +270,8 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isMe
-              ? const Color(0xFF005C4B)
-              : const Color(0xFF1F2C34),
+              ? const Color(0xFF1A3A5C)   // sent: deep blue
+              : const Color(0xFF0D1117),  // received: dark navy
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(12),
             topRight: const Radius.circular(12),
@@ -307,7 +302,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
                     msg.isSeen ? Icons.done_all : Icons.done,
                     size: 14,
                     color: msg.isSeen
-                        ? const Color(0xFF00A884)
+                        ? const Color(0xFF2D7DD2)
                         : Colors.white54,
                   ),
                 ],
@@ -321,7 +316,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
 
   Widget _buildMessageInput() {
     return Container(
-      color: const Color(0xFF1F2C34),
+      color: const Color(0xFF0D1117),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Row(
         children: [
@@ -333,7 +328,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF2A3942),
+                color: const Color(0xFF161B22),
                 borderRadius: BorderRadius.circular(24),
               ),
               child: TextField(
@@ -363,11 +358,11 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
               height: 46,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFF00A884),
+                color: Color(0xFF2D7DD2),
               ),
               child: Icon(
                 isTyping ? Icons.send : Icons.mic,
-                color: Colors.black,
+                color: Colors.white,
                 size: 20,
               ),
             ),

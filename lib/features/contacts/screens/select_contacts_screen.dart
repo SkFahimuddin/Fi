@@ -32,9 +32,9 @@ class _SelectContactsScreenState extends State<SelectContactsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
+      backgroundColor: const Color(0xFF0A0A0F),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
+        backgroundColor: const Color(0xFF0A0A0F),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -56,7 +56,7 @@ class _SelectContactsScreenState extends State<SelectContactsScreen> {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF1A1A1A),
+                color: const Color(0xFF0D1117),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
                     color: Colors.white.withOpacity(0.08)),
@@ -73,7 +73,7 @@ class _SelectContactsScreenState extends State<SelectContactsScreen> {
                   hintStyle: TextStyle(
                       color: Colors.white.withOpacity(0.3), fontSize: 14),
                   prefixIcon: const Icon(Icons.search,
-                      color: Color(0xFF00A884), size: 20),
+                      color: Color(0xFF2D7DD2), size: 20),
                   suffixIcon: searchQuery.isNotEmpty
                       ? IconButton(
                           icon: const Icon(Icons.clear,
@@ -101,7 +101,7 @@ class _SelectContactsScreenState extends State<SelectContactsScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(
-                        color: Color(0xFF00A884)),
+                        color: Color(0xFF2D7DD2)),
                   );
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -114,7 +114,6 @@ class _SelectContactsScreenState extends State<SelectContactsScreen> {
                   );
                 }
 
-                // Filter users
                 var users = snapshot.data!.docs
                     .map((doc) => UserModel.fromMap(
                         doc.data() as Map<String, dynamic>))
@@ -173,6 +172,20 @@ class _SelectContactsScreenState extends State<SelectContactsScreen> {
               },
             ),
           ),
+
+          // Footer
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12, top: 6),
+            child: Text(
+              'Fahim MindWorks',
+              style: TextStyle(
+                color: const Color(0xFF2D7DD2).withOpacity(0.3),
+                fontSize: 10,
+                letterSpacing: 1.5,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -191,7 +204,7 @@ class _SelectContactsScreenState extends State<SelectContactsScreen> {
           children: [
             CircleAvatar(
               radius: 26,
-              backgroundColor: const Color(0xFF1A1A1A),
+              backgroundColor: const Color(0xFF0D1117),
               backgroundImage: user.profilePic.isNotEmpty
                   ? NetworkImage(user.profilePic)
                   : null,
@@ -201,7 +214,7 @@ class _SelectContactsScreenState extends State<SelectContactsScreen> {
                           ? user.name[0].toUpperCase()
                           : '?',
                       style: const TextStyle(
-                          color: Color(0xFF00A884),
+                          color: Color(0xFF2D7DD2),
                           fontSize: 18,
                           fontWeight: FontWeight.bold),
                     )
@@ -234,7 +247,7 @@ class _SelectContactsScreenState extends State<SelectContactsScreen> {
               ),
             ),
             Icon(Icons.chat_bubble_outline,
-                color: const Color(0xFF00A884).withOpacity(0.6), size: 20),
+                color: const Color(0xFF2D7DD2).withOpacity(0.6), size: 20),
           ],
         ),
       ),
