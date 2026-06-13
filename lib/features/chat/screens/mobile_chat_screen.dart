@@ -174,14 +174,6 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.videocam, color: Colors.white70),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.call, color: Colors.white70),
-            onPressed: () {},
-          ),
-          IconButton(
             icon: const Icon(Icons.more_vert, color: Colors.white70),
             onPressed: () {},
           ),
@@ -270,8 +262,8 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isMe
-              ? const Color(0xFF1A3A5C)   // sent: deep blue
-              : const Color(0xFF0D1117),  // received: dark navy
+              ? const Color(0xFF1A3A5C)
+              : const Color(0xFF0D1117),
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(12),
             topRight: const Radius.circular(12),
